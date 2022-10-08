@@ -25,7 +25,7 @@ public class User : BaseModel {
   /// <summary>
   ///  Group of user
   /// </summary>
-  public object? Group;
+  public Group? Group;
 
   /// <summary>
   /// Subgroup of user
