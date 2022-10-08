@@ -7,7 +7,7 @@ public class SolutionAttempt : BaseModel {
   /// <summary>
   /// A piece of work that user is given to do
   /// </summary>
-  public required object Assignment;
+  public required Assignment Assignment;
 
   /// <summary>
   /// The author of attempt
