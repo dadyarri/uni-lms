@@ -3,7 +3,7 @@
 /// <summary>
 /// Model, which representing time by which assignment should be done
 /// </summary>
-public class Deadline {
+public class Deadline : BaseModel {
   /// <summary>
   /// Piece of work that user is given to do
   /// </summary>
