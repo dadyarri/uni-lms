@@ -40,7 +40,7 @@ public class User : BaseModel {
   /// <summary>
   /// Profile picture of user
   /// </summary>
-  public object? Avatar;
+  public Attachment? Avatar;
 
   /// <summary>
   /// Email of user
