@@ -35,7 +35,7 @@ public class User : BaseModel {
   /// <summary>
   /// Role of user
   /// </summary>
-  public required object Role;
+  public required Role Role;
 
   /// <summary>
   /// Profile picture of user
