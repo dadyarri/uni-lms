@@ -5,32 +5,32 @@
 /// </summary>
 public class ScheduleLesson : BaseModel {
   /// <summary>
-  /// Group of lesson
+  /// The group for which the lesson will be held
   /// </summary>
   public required Group Group;
 
   /// <summary>
-  /// Subgroup of lesson
+  /// The subgroup for which the lesson will be held
   /// </summary>
   public int? Subgroup;
 
   /// <summary>
-  /// Time of the lesson
+  /// The time at which the lesson will take place
   /// </summary>
   public required ScheduleTime Time;
 
   /// <summary>
-  /// Course of the lesson
+  /// The subject on which the lesson will take place
   /// </summary>
   public required Course Course;
 
   /// <summary>
-  /// Tutor of the lesson
+  /// The teacher who will conduct the lesson
   /// </summary>
   public required User Tutor;
 
   /// <summary>
-  /// Classrom of lesson
+  /// The audience in which the lesson will be held
   /// </summary>
   public required ScheduleClassroom Classroom;
 
@@ -38,4 +38,9 @@ public class ScheduleLesson : BaseModel {
   /// Week of shedule of lesson
   /// </summary>
   public List<ScheduleWeek>? Weeks;
+
+  /// <summary>
+  /// Type of lesson
+  /// </summary>
+  public required LessonType Type;
 }

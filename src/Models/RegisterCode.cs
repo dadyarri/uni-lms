@@ -10,17 +10,17 @@ public class RegisterCode : BaseModel {
   public required string Code;
 
   /// <summary>
-  /// Is code valid
+  /// Flag, which means is code was used by someone
   /// </summary>
   public required bool IsValid;
 
   /// <summary>
-  /// User who use code 
+  /// User, who used the code 
   /// </summary>
   public User? UsedBy;
 
   /// <summary>
-  /// Code registration time
+  /// The time, at which the code was used
   /// </summary>
   public required DateTime UsedAt;
 }

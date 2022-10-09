@@ -5,17 +5,17 @@
 /// </summary>
 public class SolutionAttempt : BaseModel {
   /// <summary>
-  /// A piece of work that user is given to do
+  /// A piece of work that student is given to do
   /// </summary>
   public required Assignment Assignment;
 
   /// <summary>
-  /// The author of attempt
+  /// Student, who submitted the attempt
   /// </summary>
   public required User Author;
 
   /// <summary>
-  /// Timestamp of submiting
+  /// Timestamp of submiting of the attempt
   /// </summary>
   public required DateTime SubmittedAt;
 }
