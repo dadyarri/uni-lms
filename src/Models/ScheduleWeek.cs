@@ -7,5 +7,5 @@ public class ScheduleWeek : BaseModel {
   /// <summary>
   /// Name of week
   /// </summary>
-  public required string Name;
+  public required string Name { get; set; }
 }

@@ -7,5 +7,5 @@ public class Group : BaseModel {
   /// <summary>
   /// Name of groupа
   /// </summary>
-  public required string Name;
+  public required string Name { get; set; }
 }

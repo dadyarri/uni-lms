@@ -7,10 +7,10 @@ public class AssignmentType : BaseModel {
   /// <summary>
   /// Name of assignment type
   /// </summary>
-  public required string Name;
+  public required string Name { get; set; }
 
   /// <summary>
   /// Icon of assignment type
   /// </summary>
-  public required Attachment Icon;
+  public required Attachment Icon { get; set; }
 }

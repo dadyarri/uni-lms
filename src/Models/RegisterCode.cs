@@ -7,20 +7,20 @@ public class RegisterCode : BaseModel {
   /// <summary>
   /// Code of registration
   /// </summary>
-  public required string Code;
+  public required string Code { get; set; }
 
   /// <summary>
   /// Flag, which means is code was used by someone
   /// </summary>
-  public required bool IsValid;
+  public required bool IsValid { get; set; }
 
   /// <summary>
   /// User, who used the code 
   /// </summary>
-  public User? UsedBy;
+  public User? UsedBy { get; set; }
 
   /// <summary>
   /// The time, at which the code was used
   /// </summary>
-  public required DateTime UsedAt;
+  public required DateTime UsedAt { get; set; }
 }
