@@ -22,5 +22,5 @@ public class RegisterCode : BaseModel {
   /// <summary>
   /// The time, at which the code was used
   /// </summary>
-  public required DateTime UsedAt { get; set; }
+  public DateTime? UsedAt { get; set; }
 }
