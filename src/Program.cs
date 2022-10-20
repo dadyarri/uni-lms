@@ -24,6 +24,7 @@ builder.Services.AddSwaggerGen(
   }
 );
 
+
 var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
 var app = builder.Build();
@@ -39,7 +40,16 @@ if (app.Environment.IsDevelopment()) {
   );
 }
 
+using (var scope = app.Services.CreateScope())
+{
+  var services = scope.ServiceProvider;
 
+  var context = services.GetRequiredService<ApplicationContext>();
+  if (context.Database.GetPendingMigrations().Any())
+  {
+    context.Database.Migrate();
+  }
+}
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
