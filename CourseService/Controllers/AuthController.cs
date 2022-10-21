@@ -1,20 +1,18 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
-using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+
+using Npgsql;
 
 using src.Data;
+using src.Exceptions;
 using src.Models;
 using src.RequestBodies;
 using src.Responses;
-
-using Npgsql;
 
 
 namespace src.Controllers;
@@ -82,7 +80,7 @@ public class AuthController : ControllerBase {
       return exception.SqlState switch {
         PostgresErrorCodes.UniqueViolation => Conflict(
           new Error {
-            Code = (int) HttpStatusCode.Conflict,
+            Code = (int)HttpStatusCode.Conflict,
             Message = "User already exist",
             Data = body.Email,
           }
@@ -91,14 +89,39 @@ public class AuthController : ControllerBase {
       };
     }
 
+    var emailAddress =
+      _configuration.GetRequiredSection("MailSettings").GetValue<string>("Address");
+
+    var emailToken = _configuration.GetRequiredSection("MailSettings").GetValue<string>("Token");
+
+    var emailHost = _configuration.GetRequiredSection("MailSettings").GetValue<string>("Host");
+
+    if (emailAddress == null) {
+      throw new MissingConfigurationValueException(
+        "MailSettings.Address configuration value is required"
+      );
+    }
+
+    if (emailToken == null) {
+      throw new MissingConfigurationValueException(
+        "MailSettings.Token configuration value is required"
+      );
+    }
+
+    if (emailHost == null) {
+      throw new MissingConfigurationValueException(
+        "MailSettings.Host configuration value is required"
+      );
+    }
+
     var registerCode = await InsertNewRegisterCode(user);
-    var smtpClient = new SmtpClient("smtp.mail.ru") {
+    var smtpClient = new SmtpClient(emailHost) {
       Port = 465,
-      Credentials = new NetworkCredential("superzhelezov@mail.ru", "CKWGKQ7bczLu47rMsdqH"),
+      Credentials = new NetworkCredential(emailAddress, emailToken),
       EnableSsl = true,
     };
     var mailMessage = new MailMessage {
-      From = new MailAddress("superzhelezov@mail.ru"),
+      From = new MailAddress(emailAddress),
       Subject = "Код регистрации для образовательной платформы",
       Body =
         $"<h1>Здравствуйте, {body.FirstName}!</h1> <p>Ваш адрес электронной почты был указан при создании аккаунта на сайте образовательной платформы. Зарегистрируйте аккаунт, перейдя по ссылке: https://localhost:8000/Register?code={registerCode}.</p><p>Если это письмо пришло вам по ошибке, проигнорируйте его.</p>",
@@ -110,13 +133,13 @@ public class AuthController : ControllerBase {
     return Created("/api/Auth/Create", user);
   }
 
-  /// <summary>
-  /// User registration
-  /// </summary>
-  /// <param name="body">Request body with username and password</param>
-  /// <response code="201">User created</response>
-  /// <response code="409">Conflict (there is already a user with the same name)</response>
-  /// <response code="500">Server error</response>
+  // /// <summary>
+  // /// User registration
+  // /// </summary>
+  // /// <param name="body">Request body with username and password</param>
+  // /// <response code="201">User created</response>
+  // /// <response code="409">Conflict (there is already a user with the same name)</response>
+  // /// <response code="500">Server error</response>
   // [AllowAnonymous]
   // [HttpPost("Register")]
   // [Produces("application/json")]
@@ -203,12 +226,12 @@ public class AuthController : ControllerBase {
   ) {
     using var hmac = new HMACSHA512();
     passwordSalt = hmac.Key;
-    passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+    passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
   }
 
   private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt) {
     using var hmac = new HMACSHA512(passwordSalt);
-    var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+    var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
     return computedHash.SequenceEqual(passwordHash);
   }
 
