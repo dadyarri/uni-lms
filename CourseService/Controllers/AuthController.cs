@@ -107,24 +107,6 @@ public class AuthController : ControllerBase {
 
     var emailHost = _configuration.GetRequiredSection("MailSettings").GetValue<string>("Host");
 
-    if (emailAddress == null) {
-      throw new MissingConfigurationValueException(
-        "MailSettings.Address configuration value is required"
-      );
-    }
-
-    if (emailToken == null) {
-      throw new MissingConfigurationValueException(
-        "MailSettings.Token configuration value is required"
-      );
-    }
-
-    if (emailHost == null) {
-      throw new MissingConfigurationValueException(
-        "MailSettings.Host configuration value is required"
-      );
-    }
-
     var registerCode = await CreateRegisterCode(user);
     var smtpClient = new SmtpClient(emailHost) {
       Port = 465,

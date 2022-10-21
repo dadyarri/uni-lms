@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 using src.Data;
+using src.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,7 @@ builder.Services.AddSwaggerGen(
   }
 );
 
+builder.Configuration.ValidateConfiguration();
 
 var connectionString = builder.Configuration.GetConnectionString(Environment.UserName);
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
