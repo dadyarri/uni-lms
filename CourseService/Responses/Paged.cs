@@ -8,6 +8,9 @@ namespace src.Responses;
 /// </summary>
 /// <typeparam name="TModel">Type of items in paged</typeparam>
 public class Paged<TModel> {
+  /// <summary>
+  /// Items from selected page
+  /// </summary>
   public readonly List<TModel> Items;
 
   /// <summary>

@@ -3,8 +3,6 @@
   using Microsoft.AspNetCore.JsonPatch;
   using Microsoft.AspNetCore.Mvc;
 
-  using Newtonsoft.Json;
-
   using src.Data;
   using src.Models;
   using src.RequestBodies;

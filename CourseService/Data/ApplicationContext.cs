@@ -35,6 +35,10 @@ public class ApplicationContext : DbContext {
   /// </summary>
   public DbSet<Group> Groups => Set<Group>();
 
+  /// <summary>
+  /// Configuring models before creating in database
+  /// </summary>
+  /// <param name="builder">The builder being used to construct the model for this context. Databases (and other extensions) typically define extension methods on this object that allow you to configure aspects of the model that are specific to a given database.</param>
   protected override void OnModelCreating(ModelBuilder builder) {
     builder.Entity<User>(
       entity => {
