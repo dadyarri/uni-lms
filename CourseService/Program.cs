@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(
 );
 
 
-var connectionString = builder.Configuration.GetConnectionString("Default");
+var connectionString = builder.Configuration.GetConnectionString(Environment.UserName);
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
 var app = builder.Build();
 
