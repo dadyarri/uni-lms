@@ -1,4 +1,7 @@
-﻿namespace src.Models;
+﻿using src.Dtos;
+
+
+namespace src.Models;
 
 /// <summary>
 /// Model, which representing a piece of work that user is given to do
@@ -32,7 +35,7 @@ public class Assignment : BaseModel {
   /// <summary>
   /// List of attachments
   /// </summary>
-  public List<Attachment>? Attachments { get; set; }
+  public List<AttachmentDto>? Attachments { get; set; }
 
   /// <summary>
   /// List of deadlines

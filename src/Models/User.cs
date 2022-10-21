@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 
+using src.Dtos;
+
 
 namespace src.Models;
 
@@ -40,7 +42,7 @@ public class User : BaseModel {
   /// <summary>
   /// Profile picture of user
   /// </summary>
-  public Attachment? Avatar { get; set; }
+  public AttachmentDto? Avatar { get; set; }
 
   /// <summary>
   /// Email of user
