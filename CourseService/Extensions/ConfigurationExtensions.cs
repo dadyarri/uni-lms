@@ -1,7 +1,4 @@
-﻿using src.Exceptions;
-
-
-namespace src.Extensions;
+﻿namespace src.Extensions;
 
 /// <summary>
 /// Set of extensions for configuration manager
@@ -12,31 +9,12 @@ public static class ConfigurationExtensions {
   /// </summary>
   /// <param name="configuration">Manager of configuration</param>
   /// <exception cref="InvalidOperationException">Throws, if any of required sections in configuration are missing</exception>
-  /// <exception cref="MissingConfigurationValueException">Throws, if any of the required values in configuration are missing</exception>
   public static void ValidateConfiguration(this ConfigurationManager configuration) {
-    var emailAddress =
-      configuration.GetRequiredSection("MailSettings").GetValue<string>("Address");
 
-    var emailToken = configuration.GetRequiredSection("MailSettings").GetValue<string>("Token");
+    var sections = new [] { "MailSettings:Address", "MailSettings:Token", "MailSettings:Host" };
 
-    var emailHost = configuration.GetRequiredSection("MailSettings").GetValue<string>("Host");
-
-    if (emailAddress == null) {
-      throw new MissingConfigurationValueException(
-        "MailSettings.Address configuration value is required"
-      );
-    }
-
-    if (emailToken == null) {
-      throw new MissingConfigurationValueException(
-        "MailSettings.Token configuration value is required"
-      );
-    }
-
-    if (emailHost == null) {
-      throw new MissingConfigurationValueException(
-        "MailSettings.Host configuration value is required"
-      );
+    foreach (var section in sections) {
+      var _ = configuration.GetRequiredSection(section).Value;
     }
   }
 }
