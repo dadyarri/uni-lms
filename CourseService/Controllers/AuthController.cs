@@ -40,6 +40,12 @@ public class AuthController : ControllerBase {
     _configuration = configuration;
   }
 
+  /// <summary>
+  /// Creating user by administrator (filling data, known by educational organization)
+  /// </summary>
+  /// <param name="body">User's personal data</param>
+  /// <returns>Model of created users</returns>
+  /// <exception cref="MissingConfigurationValueException">Raised, if configuration lacks of required properties</exception>
   [HttpPost("Create")]
   [Produces("application/json")]
   public async Task<ActionResult<User>> Create(UserParameters body) {
