@@ -14,4 +14,6 @@ public class UserParameters {
   public int? Subgroup { get; set; }
   public required Guid RoleId { get; set; }
   public required string Email { get; set; }
+  
+  public required IFormFile Avatar { get; set; }
 }

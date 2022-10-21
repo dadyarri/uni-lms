@@ -29,6 +29,8 @@ builder.Services.AddSwaggerGen(
   }
 );
 
+builder.Services.AddSingleton<HttpClient>();
+
 builder.Configuration.ValidateConfiguration();
 
 var connectionString = builder.Configuration.GetConnectionString(Environment.UserName);

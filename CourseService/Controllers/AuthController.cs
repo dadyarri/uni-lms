@@ -10,9 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
+using Newtonsoft.Json;
+
 using Npgsql;
 
 using src.Data;
+using src.Dtos;
 using src.Exceptions;
 using src.Models;
 using src.RequestBodies;
@@ -29,15 +32,18 @@ namespace src.Controllers;
 public class AuthController : ControllerBase {
   private readonly IConfiguration _configuration;
   private readonly ApplicationContext _db;
+  private readonly HttpClient _httpClient;
 
   /// <summary>
   /// Controller's constructor
   /// </summary>
   /// <param name="context">Automatically injected database context</param>
   /// <param name="configuration">Automatically injected project configuration</param>
-  public AuthController(ApplicationContext context, IConfiguration configuration) {
+  /// <param name="httpClient">Automatically injected http client</param>
+  public AuthController(ApplicationContext context, IConfiguration configuration, HttpClient httpClient) {
     _db = context;
     _configuration = configuration;
+    _httpClient = httpClient;
   }
 
   /// <summary>
@@ -71,6 +77,19 @@ public class AuthController : ControllerBase {
         }
       );
     }
+    
+    // uploading avatar to file service
+    AttachmentDto? attachment = null;
+    var multipartFormData = new MultipartFormDataContent();
+    var ms = new MemoryStream();
+    await body.Avatar.CopyToAsync(ms);
+    multipartFormData.Add(new ByteArrayContent(ms.ToArray()), body.Avatar.FileName, body.Avatar.FileName);
+    var result = await _httpClient.PostAsync(new Uri("https://localhost:8080/api/File"), multipartFormData);
+
+    if (result.StatusCode == HttpStatusCode.Created) {
+      var resultBody = await result.Content.ReadAsStringAsync();
+      attachment = JsonConvert.DeserializeObject<AttachmentDto>(resultBody);
+    } 
 
     var user = new User {
       FirstName = body.FirstName,
@@ -80,6 +99,7 @@ public class AuthController : ControllerBase {
       Subgroup = body.Subgroup,
       Role = role,
       Email = body.Email,
+      Avatar = attachment,
     };
     await _db.Users.AddAsync(user);
     try {
