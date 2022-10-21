@@ -36,29 +36,6 @@ public class AuthController : ControllerBase {
     _configuration = configuration;
   }
 
-  private async Task<string> InsertNewRegisterCode(User user) {
-    var randomString = GenerateRandomString(5);
-    var registerCode = new RegisterCode {
-      Code = randomString,
-      IsValid = true,
-      UsedBy = user,
-    };
-    await _db.RegisterCodes.AddAsync(registerCode);
-    try {
-      await _db.SaveChangesAsync();
-    }
-    catch (DbUpdateException ex) when
-      (ex.InnerException is PostgresException exception) {
-      switch (exception.SqlState) {
-        case PostgresErrorCodes.UniqueViolation:
-          await InsertNewRegisterCode(user);
-          break;
-      }
-    }
-
-    return registerCode.Code;
-  }
-
   [HttpPost("Create")]
   [Produces("application/json")]
   public async Task<ActionResult<User>> Create(UserParameters body) {
@@ -241,5 +218,28 @@ public class AuthController : ControllerBase {
     return new string(
       Enumerable.Repeat(alphabet, length).Select(s => s[random.Next(s.Length)]).ToArray()
     );
+  }
+  
+  private async Task<string> InsertNewRegisterCode(User user) {
+    var randomString = GenerateRandomString(5);
+    var registerCode = new RegisterCode {
+      Code = randomString,
+      IsValid = true,
+      UsedBy = user,
+    };
+    await _db.RegisterCodes.AddAsync(registerCode);
+    try {
+      await _db.SaveChangesAsync();
+    }
+    catch (DbUpdateException ex) when
+      (ex.InnerException is PostgresException exception) {
+      switch (exception.SqlState) {
+        case PostgresErrorCodes.UniqueViolation:
+          await InsertNewRegisterCode(user);
+          break;
+      }
+    }
+
+    return registerCode.Code;
   }
 }
