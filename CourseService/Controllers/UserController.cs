@@ -54,7 +54,7 @@ public class UserController : ControllerBase {
       if (user is null) {
         return NotFound(
           new Error {
-            Code = (int) HttpStatusCode.NotFound,
+            Code = (int)HttpStatusCode.NotFound,
             Message = "User with this id was not found",
             Data = id,
           }
@@ -125,7 +125,7 @@ public class UserController : ControllerBase {
     if (entity is null) {
       return NotFound(
         new Error {
-          Code = (int) HttpStatusCode.NotFound,
+          Code = (int)HttpStatusCode.NotFound,
           Message = "User with this id was not found",
           Data = id,
         }
@@ -161,7 +161,7 @@ public class UserController : ControllerBase {
     if (user == null) {
       return BadRequest(
         new Error {
-          Code = (int) HttpStatusCode.BadRequest,
+          Code = (int)HttpStatusCode.BadRequest,
           Message = "User was not passed",
         }
       );
@@ -172,7 +172,7 @@ public class UserController : ControllerBase {
     if (entity == null) {
       return NotFound(
         new Error {
-          Code = (int) HttpStatusCode.NotFound,
+          Code = (int)HttpStatusCode.NotFound,
           Message = "User with this id was not found",
           Data = id,
         }
