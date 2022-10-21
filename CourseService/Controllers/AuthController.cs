@@ -49,7 +49,6 @@ public class AuthController : ControllerBase {
   [HttpPost("Create")]
   [Produces("application/json")]
   public async Task<ActionResult<User>> Create(UserParameters body) {
-
     var group = await _db.Groups.FindAsync(body.GroupId);
     var role = await _db.Roles.FindAsync(body.RoleId);
 
@@ -72,7 +71,7 @@ public class AuthController : ControllerBase {
         }
       );
     }
-    
+
     var user = new User {
       FirstName = body.FirstName,
       LastName = body.LastName,
@@ -282,5 +281,13 @@ public class AuthController : ControllerBase {
     }
 
     return registerCode.Code;
+  }
+
+  private void CreatePasswordHash(
+    string password, out byte[] passwordHash, out byte[] passwordSalt
+  ) {
+    using var hmac = new HMACSHA512();
+    passwordSalt = hmac.Key;
+    passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
   }
 }

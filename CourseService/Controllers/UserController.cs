@@ -165,12 +165,4 @@ public class UserController : ControllerBase {
     await _db.SaveChangesAsync();
     return Ok(entity);
   }
-
-  private void CreatePasswordHash(
-    string password, out byte[] passwordHash, out byte[] passwordSalt
-  ) {
-    using var hmac = new HMACSHA512();
-    passwordSalt = hmac.Key;
-    passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-  }
 }
