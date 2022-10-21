@@ -3,8 +3,6 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-using Newtonsoft.Json;
-
 using src.Data;
 using src.Models;
 using src.RequestBodies;
@@ -49,7 +47,7 @@ public class UserController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<ActionResult<User>> GetUserById(Guid id) {
     {
-      var user = await _db.Roles.FindAsync(id);
+      var user = await _db.Users.FindAsync(id);
 
       if (user is null) {
         return NotFound(
@@ -142,7 +140,7 @@ public class UserController : ControllerBase {
   /// Update user
   /// </summary>
   /// <param name="id">Id of user</param>
-  /// <param name="role">JSON PATCH request updating a resource</param>
+  /// <param name="user">JSON PATCH request updating a resource</param>
   /// <response code="200">OK</response>
   /// <response code="400">Bad request</response>
   /// <response code="401">Unauthorized</response>
