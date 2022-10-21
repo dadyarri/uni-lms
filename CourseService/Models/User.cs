@@ -53,11 +53,11 @@ public class User : BaseModel {
   /// Hash of password of user
   /// </summary>
   [JsonIgnore]
-  public string? PasswordHash;
+  public byte[]? PasswordHash;
 
   /// <summary>
   /// Salt of password of user
   /// </summary>
   [JsonIgnore]
-  public string? PasswordSalt;
+  public byte[]? PasswordSalt;
 }
