@@ -1,3 +1,5 @@
+using System.Reflection;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -21,6 +23,8 @@ builder.Services.AddSwaggerGen(
           "API for working with courses, users, groups, auth",
       }
     );
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), includeControllerXmlComments: true);
   }
 );
 

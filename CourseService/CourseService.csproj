@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>src</RootNamespace>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\CourseService.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
