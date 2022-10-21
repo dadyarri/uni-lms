@@ -91,7 +91,7 @@ public class AuthController : ControllerBase {
       );
     }
 
-    var registerCode = await InsertNewRegisterCode(user);
+    var registerCode = await CreateRegisterCode(user);
     var smtpClient = new SmtpClient(emailHost) {
       Port = 465,
       Credentials = new NetworkCredential(emailAddress, emailToken),
@@ -220,7 +220,7 @@ public class AuthController : ControllerBase {
     );
   }
   
-  private async Task<string> InsertNewRegisterCode(User user) {
+  private async Task<string> CreateRegisterCode(User user) {
     var randomString = GenerateRandomString(5);
     var registerCode = new RegisterCode {
       Code = randomString,
@@ -235,7 +235,7 @@ public class AuthController : ControllerBase {
       (ex.InnerException is PostgresException exception) {
       switch (exception.SqlState) {
         case PostgresErrorCodes.UniqueViolation:
-          await InsertNewRegisterCode(user);
+          await CreateRegisterCode(user);
           break;
       }
     }
