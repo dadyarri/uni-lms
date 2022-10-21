@@ -5,6 +5,19 @@
       "indentationSize": 2,
       "tabSize": 2,
       "useTabs": false
+    },
+    "maintainabilityRules": {
+      "topLevelTypes": [
+        "class",
+        "enum",
+        "interface",
+        "struct"
+      ]
+    },
+    "layoutRules": {
+      "newlineAtEndOfFile": "require",
+      "allowConsecutiveUsings": false,
+      "allowDoWhileOnClosingBrace": true
     }
   }
 }
