@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -162,5 +164,13 @@ public class UserController : ControllerBase {
     user.ApplyTo(entity, ModelState);
     await _db.SaveChangesAsync();
     return Ok(entity);
+  }
+
+  private void CreatePasswordHash(
+    string password, out byte[] passwordHash, out byte[] passwordSalt
+  ) {
+    using var hmac = new HMACSHA512();
+    passwordSalt = hmac.Key;
+    passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
   }
 }
