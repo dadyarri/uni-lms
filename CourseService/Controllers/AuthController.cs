@@ -127,27 +127,27 @@ public class AuthController : ControllerBase {
   public async Task<ActionResult<string>> Login(LoginBody body) {
     var user = await _db.Users.FirstOrDefaultAsync(u => u.Email.Equals(body.Email));
 
-    if (user is null)
-    {
-      return BadRequest(new Error
-      {
-        Code = (int)HttpStatusCode.BadRequest,
-        Message = "User was not found",
-        Data = body.Email,
-      });
+    if (user is null) {
+      return BadRequest(
+        new Error {
+          Code = (int)HttpStatusCode.BadRequest,
+          Message = "User was not found",
+          Data = body.Email,
+        }
+      );
     }
 
     if (user.PasswordHash == null || user.PasswordSalt == null) {
       throw new PasswordWasNotSetException();
     }
 
-    if (!VerifyPasswordHash(body.Password, user.PasswordHash, user.PasswordSalt))
-    {
-      return BadRequest(new Error
-      {
-        Code = (int)HttpStatusCode.BadRequest,
-        Message = "Wrong password",
-      });
+    if (!VerifyPasswordHash(body.Password, user.PasswordHash, user.PasswordSalt)) {
+      return BadRequest(
+        new Error {
+          Code = (int)HttpStatusCode.BadRequest,
+          Message = "Wrong password",
+        }
+      );
     }
 
     return Ok(GenerateToken(user));
@@ -235,14 +235,6 @@ public class AuthController : ControllerBase {
     return jwt;
   }
 
-  private void CreatePasswordHash(
-    string password, out byte[] passwordHash, out byte[] passwordSalt
-  ) {
-    using var hmac = new HMACSHA512();
-    passwordSalt = hmac.Key;
-    passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-  }
-
   private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt) {
     using var hmac = new HMACSHA512(passwordSalt);
     var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
@@ -256,7 +248,7 @@ public class AuthController : ControllerBase {
       Enumerable.Repeat(alphabet, length).Select(s => s[random.Next(s.Length)]).ToArray()
     );
   }
-  
+
   private async Task<string> CreateRegisterCode(User user) {
     var randomString = GenerateRandomString(5);
     var registerCode = new RegisterCode {
