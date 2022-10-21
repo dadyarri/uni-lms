@@ -10,8 +10,8 @@ public class UserParameters {
   public required string FirstName { get; set; } = string.Empty;
   public required string LastName { get; set; } = string.Empty;
   public string? Patronymic { get; set; } = string.Empty;
-  public Group? Group { get; set; }
+  public Guid? GroupId { get; set; }
   public int? Subgroup { get; set; }
-  public required Role Role { get; set; }
+  public required Guid RoleId { get; set; }
   public required string Email { get; set; }
 }

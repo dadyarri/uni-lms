@@ -49,13 +49,37 @@ public class AuthController : ControllerBase {
   [HttpPost("Create")]
   [Produces("application/json")]
   public async Task<ActionResult<User>> Create(UserParameters body) {
+
+    var group = await _db.Groups.FindAsync(body.GroupId);
+    var role = await _db.Roles.FindAsync(body.RoleId);
+
+    if (group == null) {
+      return NotFound(
+        new Error {
+          Code = (int)HttpStatusCode.NotFound,
+          Message = "GroupId with this id doesn't exist",
+          Data = body.GroupId,
+        }
+      );
+    }
+
+    if (role == null) {
+      return NotFound(
+        new Error {
+          Code = (int)HttpStatusCode.NotFound,
+          Message = "RoleId with this id doesn't exist",
+          Data = body.RoleId,
+        }
+      );
+    }
+    
     var user = new User {
       FirstName = body.FirstName,
       LastName = body.LastName,
       Patronymic = body.Patronymic,
-      Group = body.Group,
+      Group = group,
       Subgroup = body.Subgroup,
-      Role = body.Role,
+      Role = role,
       Email = body.Email,
     };
     await _db.Users.AddAsync(user);
