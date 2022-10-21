@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using src.Data;
@@ -11,9 +12,11 @@ using src.Data;
 namespace src.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221020082839_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace src.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("src.Models.Attachment", b =>
+            modelBuilder.Entity("CourseService.Models.Attachment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +48,7 @@ namespace src.Migrations
                     b.ToTable("Attachment");
                 });
 
-            modelBuilder.Entity("src.Models.Group", b =>
+            modelBuilder.Entity("CourseService.Models.Group", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,7 +63,7 @@ namespace src.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("src.Models.RegisterCode", b =>
+            modelBuilder.Entity("CourseService.Models.RegisterCode", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,7 +92,7 @@ namespace src.Migrations
                     b.ToTable("RegisterCodes");
                 });
 
-            modelBuilder.Entity("src.Models.Role", b =>
+            modelBuilder.Entity("CourseService.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +111,7 @@ namespace src.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("src.Models.User", b =>
+            modelBuilder.Entity("CourseService.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,26 +158,26 @@ namespace src.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("src.Models.RegisterCode", b =>
+            modelBuilder.Entity("CourseService.Models.RegisterCode", b =>
                 {
-                    b.HasOne("src.Models.User", "UsedBy")
+                    b.HasOne("CourseService.Models.User", "UsedBy")
                         .WithMany()
                         .HasForeignKey("UsedById");
 
                     b.Navigation("UsedBy");
                 });
 
-            modelBuilder.Entity("src.Models.User", b =>
+            modelBuilder.Entity("CourseService.Models.User", b =>
                 {
-                    b.HasOne("src.Models.Attachment", "Avatar")
+                    b.HasOne("CourseService.Models.Attachment", "Avatar")
                         .WithMany()
                         .HasForeignKey("AvatarId");
 
-                    b.HasOne("src.Models.Group", "Group")
+                    b.HasOne("CourseService.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
 
-                    b.HasOne("src.Models.Role", "Role")
+                    b.HasOne("CourseService.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
