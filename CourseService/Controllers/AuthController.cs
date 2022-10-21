@@ -126,6 +126,35 @@ public class AuthController : ControllerBase {
   }
 
   /// <summary>
+  /// Registering user (assigning password to user)
+  /// </summary>
+  /// <param name="body">Body of request (register code and password)</param>
+  /// <returns>Model of created user</returns>
+  [AllowAnonymous]
+  [HttpPost("Register")]
+  [ProducesResponseType(StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  public async Task<ActionResult<User>> Register(RegisterBody body) {
+    var registerCode = await _db.RegisterCodes.FirstAsync(rc => rc.Code.Equals(body.RegisterCode));
+
+    CreatePasswordHash(body.Password, out var passwordHash, out var passwordSalt);
+
+    registerCode.IsValid = false;
+    registerCode.UsedAt = DateTime.Now;
+
+    if (registerCode.UsedBy == null) {
+      return Problem("Register code doesn't have user, to which the code is belong");
+    }
+
+    registerCode.UsedBy.PasswordHash = passwordHash;
+    registerCode.UsedBy.PasswordSalt = passwordSalt;
+
+    await _db.SaveChangesAsync();
+
+    return Created("/api/Auth/Register", registerCode.UsedBy);
+  }
+
+  /// <summary>
   /// Authenticate user and generate JWT
   /// </summary>
   /// <param name="body">Login and password of user</param>
