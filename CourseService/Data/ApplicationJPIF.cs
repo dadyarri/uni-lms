@@ -12,7 +12,7 @@ public class ApplicationJpif {
   /// <summary>
   /// Gets the PATCH request body formatter
   /// </summary>
-  /// <returns></returns>
+  /// <returns>Body formatter</returns>
   public static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter() {
     var builder = new ServiceCollection()
                   .AddLogging()

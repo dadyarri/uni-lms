@@ -40,7 +40,7 @@ public class GroupController : ControllerBase {
   /// <response code="401">Unauthorized</response>
   /// <response code="404">Not found</response>
   /// <response code="500">Internal server error</response>
-  /// <returns>Role object</returns>
+  /// <returns>Group object</returns>
   [HttpGet("{id:Guid}")]
   [Produces("application/json")]
   [ProducesResponseType(StatusCodes.Status200OK)]
@@ -77,7 +77,7 @@ public class GroupController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<ActionResult<Paged<Role>>> GetAllGroups(
+  public async Task<ActionResult<Paged<Group>>> GetAllGroups(
     [FromQuery] PagingParameters parameters
   ) {
     var queryResults = _db.Groups.OrderBy(p => p.Name);
@@ -99,10 +99,10 @@ public class GroupController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<ActionResult<Role>> CreateGroup(Group group) {
+  public async Task<ActionResult<Group>> CreateGroup(Group group) {
     var created = _db.Groups.Add(group);
     await _db.SaveChangesAsync();
-    return Created("/api/Controller", created.Entity);
+    return Created("/api/Group", created.Entity);
   }
 
   /// <summary>

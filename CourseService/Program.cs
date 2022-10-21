@@ -16,9 +16,9 @@ builder.Services.AddSwaggerGen(
       "v1",
       new OpenApiInfo {
         Version = "v0.0.1",
-        Title = "File API",
+        Title = "Courses Service API",
         Description =
-          "API for upload and work with attachments"
+          "API for working with courses, users, groups, auth",
       }
     );
   }

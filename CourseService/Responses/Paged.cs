@@ -4,39 +4,39 @@
 namespace src.Responses;
 
 /// <summary>
-/// Постраничный список
+/// Paginated list
 /// </summary>
-/// <typeparam name="TModel"></typeparam>
+/// <typeparam name="TModel">Type of items in paged</typeparam>
 public class Paged<TModel> {
   public readonly List<TModel> Items;
 
   /// <summary>
-  /// Номер текущей страницы
+  /// Current page
   /// </summary>
   public readonly int CurrentPage;
 
   /// <summary>
-  /// Общее количество страниц
+  /// Total pages
   /// </summary>
   public readonly int TotalPages;
 
   /// <summary>
-  /// Размер страницы
+  /// Size of page
   /// </summary>
   public int PageSize;
 
   /// <summary>
-  /// Общее количество элементов
+  /// Total elements
   /// </summary>
   public int TotalCount;
 
   /// <summary>
-  /// Конструктов
+  /// Constructor
   /// </summary>
-  /// <param name="items">Список моделей</param>
-  /// <param name="count">Количество элементов</param>
-  /// <param name="pageNumber">Номер страницы</param>
-  /// <param name="pageSize">Размер страницы</param>
+  /// <param name="items">List of models</param>
+  /// <param name="count">Amount of elements</param>
+  /// <param name="pageNumber">Page number</param>
+  /// <param name="pageSize">Page size</param>
   public Paged(List<TModel> items, int count, int pageNumber, int pageSize) {
     TotalCount = count;
     PageSize = pageSize;
@@ -46,22 +46,22 @@ public class Paged<TModel> {
   }
 
   /// <summary>
-  /// Флаг, указывающий на наличие предыдущей страницы
+  /// Whether there is previous page
   /// </summary>
   public bool HasPrevious => CurrentPage > 1;
 
   /// <summary>
-  /// Флаг, указывающий на наличие следующей страницы
+  /// Whether there is next page
   /// </summary>
   public bool HasNext => CurrentPage < TotalPages;
 
   /// <summary>
-  /// Конвертирование результата запроса в постраничный список
+  /// Converting query results to paginated result
   /// </summary>
-  /// <param name="source">Исходные данные</param>
-  /// <param name="pageNumber">Номер страницы</param>
-  /// <param name="pageSize">Размер страницы</param>
-  /// <returns></returns>
+  /// <param name="source">Query results</param>
+  /// <param name="pageNumber">Number of page to fetch</param>
+  /// <param name="pageSize">Size of page</param>
+  /// <returns>Paginated result</returns>
   public static async Task<Paged<TModel>> ToPaged(
     IQueryable<TModel> source, int pageNumber, int pageSize
   ) {

@@ -90,7 +90,7 @@
     /// <summary>
     /// Create role
     /// </summary>
-    /// <param name="role">Model of roleа</param>
+    /// <param name="role">Model of role</param>
     /// <response code="201">Role is created</response>
     /// <response code="401">Unauthorized</response>
     /// <response code="500">Internal server error</response>
@@ -102,7 +102,7 @@
     public async Task<ActionResult<Role>> CreateRole(Role role) {
       var created = _db.Roles.Add(role);
       await _db.SaveChangesAsync();
-      return Created("/api/Controller", created.Entity);
+      return Created("/api/Role", created.Entity);
     }
 
     /// <summary>
