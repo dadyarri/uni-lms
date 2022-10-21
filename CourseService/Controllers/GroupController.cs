@@ -54,7 +54,7 @@ public class GroupController : ControllerBase {
       if (group is null) {
         return NotFound(
           new Error {
-            Code = (int) HttpStatusCode.NotFound,
+            Code = (int)HttpStatusCode.NotFound,
             Message = "Group with this id was not found",
             Data = id,
           }
@@ -125,7 +125,7 @@ public class GroupController : ControllerBase {
     if (entity is null) {
       return NotFound(
         new Error {
-          Code = (int) HttpStatusCode.NotFound,
+          Code = (int)HttpStatusCode.NotFound,
           Message = "Group with this id was not found",
           Data = id,
         }
@@ -161,7 +161,7 @@ public class GroupController : ControllerBase {
     if (group == null) {
       return BadRequest(
         new Error {
-          Code = (int) HttpStatusCode.BadRequest,
+          Code = (int)HttpStatusCode.BadRequest,
           Message = "Group was not passed",
         }
       );
@@ -172,7 +172,7 @@ public class GroupController : ControllerBase {
     if (entity == null) {
       return NotFound(
         new Error {
-          Code = (int) HttpStatusCode.NotFound,
+          Code = (int)HttpStatusCode.NotFound,
           Message = "Group with this id was not found",
           Data = id,
         }
