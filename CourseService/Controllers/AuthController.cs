@@ -111,21 +111,6 @@ public class AuthController : ControllerBase {
   }
 
   // /// <summary>
-  // /// User registration
-  // /// </summary>
-  // /// <param name="body">Request body with username and password</param>
-  // /// <response code="201">User created</response>
-  // /// <response code="409">Conflict (there is already a user with the same name)</response>
-  // /// <response code="500">Server error</response>
-  // [AllowAnonymous]
-  // [HttpPost("Register")]
-  // [Produces("application/json")]
-  // [ProducesResponseType(StatusCodes.Status201Created)]
-  // [ProducesResponseType(StatusCodes.Status409Conflict)]
-  // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  // public async Task<ActionResult<User>> Register(UserParameters body) { }
-
-  // /// <summary>
   // /// Аутентификация пользователя и генерация JWT
   // /// </summary>
   // /// <param name="body">Логин и пароль пользователя</param>

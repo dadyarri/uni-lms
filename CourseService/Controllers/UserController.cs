@@ -86,24 +86,6 @@ public class UserController : ControllerBase {
   }
 
   /// <summary>
-  /// Create user
-  /// </summary>
-  /// <param name="user">Model of user</param>
-  /// <response code="201">User is created</response>
-  /// <response code="401">Unauthorized</response>
-  /// <response code="500">Internal server error</response>
-  [HttpPost]
-  [Produces("application/json")]
-  [ProducesResponseType(StatusCodes.Status201Created)]
-  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<ActionResult<User>> CreateUser(User user) {
-    var created = _db.Users.Add(user);
-    await _db.SaveChangesAsync();
-    return Created("/api/User", created.Entity);
-  }
-
-  /// <summary>
   /// Delete user
   /// </summary>
   /// <param name="id">Id of user</param>
