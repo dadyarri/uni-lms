@@ -8,9 +8,4 @@ public class AssignmentType : BaseModel {
   /// Name of assignment type
   /// </summary>
   public required string Name { get; set; }
-
-  /// <summary>
-  /// Icon of assignment type
-  /// </summary>
-  public required Attachment Icon { get; set; }
 }
