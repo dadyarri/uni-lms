@@ -27,10 +27,10 @@ public class AuthController : ControllerBase {
   private readonly ApplicationContext _db;
 
   /// <summary>
-  /// Controller constructor
+  /// Controller's constructor
   /// </summary>
-  /// <param name="context">Automatically added database context</param>
-  /// <param name="configuration">Automatically added project configuration</param>
+  /// <param name="context">Automatically injected database context</param>
+  /// <param name="configuration">Automatically injected project configuration</param>
   public AuthController(ApplicationContext context, IConfiguration configuration) {
     _db = context;
     _configuration = configuration;

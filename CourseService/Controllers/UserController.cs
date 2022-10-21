@@ -77,13 +77,13 @@ public class UserController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<ActionResult<Paged<Role>>> GetAllUsers(
+  public async Task<ActionResult<Paged<User>>> GetAllUsers(
     [FromQuery] PagingParameters parameters
   ) {
-    var queryResults = _db.Roles.OrderBy(p => p.Id);
+    var queryResults = _db.Users.OrderBy(p => p.Id);
 
-    Paged<Role> roles =
-      await Paged<Role>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
+    Paged<User> roles =
+      await Paged<User>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
     return Ok(roles);
   }
 
@@ -91,7 +91,7 @@ public class UserController : ControllerBase {
   /// Create user
   /// </summary>
   /// <param name="user">Model of user</param>
-  /// <response code="201">Role is created</response>
+  /// <response code="201">User is created</response>
   /// <response code="401">Unauthorized</response>
   /// <response code="500">Internal server error</response>
   [HttpPost]
@@ -102,7 +102,7 @@ public class UserController : ControllerBase {
   public async Task<ActionResult<User>> CreateUser(User user) {
     var created = _db.Users.Add(user);
     await _db.SaveChangesAsync();
-    return Created("/api/Controller", created.Entity);
+    return Created("/api/User", created.Entity);
   }
 
   /// <summary>
