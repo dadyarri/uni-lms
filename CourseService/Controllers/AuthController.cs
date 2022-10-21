@@ -244,7 +244,7 @@ public class AuthController : ControllerBase {
     string? securityToken;
 
     try {
-      securityToken = _configuration.GetRequiredSection("Security").GetValue<string>("Token");
+      securityToken = _configuration.GetRequiredSection("Security:Token").Value;
     }
     catch (InvalidOperationException) {
       throw new MissingConfigurationValueException(
