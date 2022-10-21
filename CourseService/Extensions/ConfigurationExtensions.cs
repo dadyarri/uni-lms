@@ -11,7 +11,7 @@ public static class ConfigurationExtensions {
   /// <exception cref="InvalidOperationException">Throws, if any of required sections in configuration are missing</exception>
   public static void ValidateConfiguration(this ConfigurationManager configuration) {
 
-    var sections = new [] { "MailSettings:Address", "MailSettings:Token", "MailSettings:Host" };
+    var sections = new [] { "MailSettings:Address", "MailSettings:Token", "MailSettings:Host", "Security:Token" };
 
     foreach (var section in sections) {
       var _ = configuration.GetRequiredSection(section).Value;
