@@ -80,7 +80,7 @@ public class GroupController : ControllerBase {
   public async Task<ActionResult<Paged<Role>>> GetAllGroups(
     [FromQuery] PagingParameters parameters
   ) {
-    var queryResults = _db.Groups.OrderBy(p => p.Id);
+    var queryResults = _db.Groups.OrderBy(p => p.Name);
 
     Paged<Group> groups =
       await Paged<Group>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
