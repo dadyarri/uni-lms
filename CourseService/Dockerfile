@@ -5,10 +5,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["CourseService/CourseService.csproj", "CourseService/"]
+COPY ["CourseService.csproj", "CourseService/"]
 RUN dotnet restore "CourseService/CourseService.csproj"
+WORKDIR "/src/CourceService"
 COPY . .
-WORKDIR "/src/CourseService"
 RUN dotnet build "CourseService.csproj" -c Release -o /app/build
 
 FROM build AS publish
