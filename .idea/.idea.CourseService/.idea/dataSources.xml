@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/lms</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="lms@docker" uuid="c3bc037a-47f5-42b7-8cc4-84410641bf80">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:7232/lmsCourses</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
