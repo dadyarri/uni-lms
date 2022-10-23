@@ -37,16 +37,13 @@ var connectionString = builder.Configuration.GetConnectionString(Environment.Use
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
 var app = builder.Build();
 
-
-if (app.Environment.IsDevelopment()) {
-  app.UseSwagger();
-  app.UseSwaggerUI(
-    options => {
-      options.SwaggerEndpoint("swagger/v1/swagger.json", "v1");
-      options.RoutePrefix = string.Empty;
-    }
-  );
-}
+app.UseSwagger();
+app.UseSwaggerUI(
+  options => {
+    options.SwaggerEndpoint("swagger/v1/swagger.json", "v1");
+    options.RoutePrefix = string.Empty;
+  }
+);
 
 using (var scope = app.Services.CreateScope())
 {
@@ -58,7 +55,6 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
   }
 }
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
