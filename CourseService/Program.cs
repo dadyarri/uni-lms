@@ -25,7 +25,10 @@ builder.Services.AddSwaggerGen(
       }
     );
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), includeControllerXmlComments: true);
+    options.IncludeXmlComments(
+      Path.Combine(AppContext.BaseDirectory, xmlFilename),
+      includeControllerXmlComments: true
+    );
   }
 );
 
@@ -45,13 +48,11 @@ app.UseSwaggerUI(
   }
 );
 
-using (var scope = app.Services.CreateScope())
-{
+using (var scope = app.Services.CreateScope()) {
   var services = scope.ServiceProvider;
 
   var context = services.GetRequiredService<ApplicationContext>();
-  if (context.Database.GetPendingMigrations().Any())
-  {
+  if (context.Database.GetPendingMigrations().Any()) {
     context.Database.Migrate();
   }
 }
