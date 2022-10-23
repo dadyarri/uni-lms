@@ -7,31 +7,32 @@ namespace src.Responses;
 /// Paginated list
 /// </summary>
 /// <typeparam name="TModel">Type of items in paged</typeparam>
+[Serializable]
 public class Paged<TModel> {
   /// <summary>
   /// Items from selected page
   /// </summary>
-  public readonly List<TModel> Items;
+  public List<TModel> Items { get; init; }
 
   /// <summary>
   /// Current page
   /// </summary>
-  public readonly int CurrentPage;
+  public int CurrentPage { get; init; }
 
   /// <summary>
   /// Total pages
   /// </summary>
-  public readonly int TotalPages;
+  public int TotalPages { get; init; }
 
   /// <summary>
   /// Size of page
   /// </summary>
-  public int PageSize;
+  public int PageSize { get; init; }
 
   /// <summary>
   /// Total elements
   /// </summary>
-  public int TotalCount;
+  public int TotalCount { get; init; }
 
   /// <summary>
   /// Constructor
@@ -41,10 +42,15 @@ public class Paged<TModel> {
   /// <param name="pageNumber">Page number</param>
   /// <param name="pageSize">Page size</param>
   public Paged(List<TModel> items, int count, int pageNumber, int pageSize) {
+    if (count == 0) {
+      TotalPages = 0;
+    } else {
+      TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+    }
+
     TotalCount = count;
     PageSize = pageSize;
     CurrentPage = pageNumber;
-    TotalPages = (int) Math.Ceiling(count / (double) pageSize);
     Items = items;
   }
 
@@ -68,8 +74,14 @@ public class Paged<TModel> {
   public static async Task<Paged<TModel>> ToPaged(
     IQueryable<TModel> source, int pageNumber, int pageSize
   ) {
-    int count = source.Count();
-    var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+    var count = source.Count();
+    List<TModel> items;
+
+    if (count == 0) {
+      items = new List<TModel>();
+    } else {
+      items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+    }
 
     return new Paged<TModel>(
       items,
