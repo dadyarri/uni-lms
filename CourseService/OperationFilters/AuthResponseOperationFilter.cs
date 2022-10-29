@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 
+using Serilog;
+
 using Swashbuckle.AspNetCore.SwaggerGen;
+
+using ILogger = Serilog.ILogger;
 
 
 namespace src.OperationFilters;
@@ -10,6 +14,8 @@ namespace src.OperationFilters;
 /// Filter, which applies default security policy to every endpoints without AllowAnonymousAttribute
 /// </summary>
 public class AuthResponsesOperationFilter : IOperationFilter {
+  private readonly ILogger _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+
   /// <summary>
   /// Applies the filter
   /// </summary>
@@ -17,17 +23,25 @@ public class AuthResponsesOperationFilter : IOperationFilter {
   /// <param name="context">Filter's context</param>
   public void Apply(OpenApiOperation operation, OperationFilterContext context) {
     if (context.MethodInfo.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
+      _logger.Information("{MethodName} has AllowAnonymous, skipping", context.MethodInfo.Name);
       return;
     }
 
     if (context.MethodInfo.DeclaringType == null) {
+      _logger.Information("{DeclaringType} is null, skipping", context.MethodInfo.DeclaringType);
       return;
     }
 
     if (context.MethodInfo
                .DeclaringType.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
+      _logger.Information(
+        "{Name} has AllowAnonymous, skipping",
+        context.MethodInfo.DeclaringType.Name
+      );
       return;
     }
+    
+    _logger.Information("{MethodName} hasn't AllowAnonymous, adding security policy", context.MethodInfo.Name);
 
     operation.Security = new List<OpenApiSecurityRequirement>() {
       new() {
