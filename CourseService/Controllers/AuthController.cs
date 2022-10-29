@@ -79,11 +79,16 @@ public class AuthController : ControllerBase {
     }
     
     // uploading avatar to file service
+    
+    // TODO: Избавиться от таблицы AttachmentDto в этом микросервисе, хранить лишь ИД аватарки
+    // TODO: Перенести загрузку вложения в утилиту (здесь ее просто вызывать и получать идентификатор)
     AttachmentDto? attachment = null;
     var multipartFormData = new MultipartFormDataContent();
     var ms = new MemoryStream();
     await body.Avatar.CopyToAsync(ms);
     multipartFormData.Add(new ByteArrayContent(ms.ToArray()), body.Avatar.FileName, body.Avatar.FileName);
+
+    // TODO: Придумать способ динамически получать урл микросервиса
     var result = await _httpClient.PostAsync(new Uri("https://localhost:8080/api/File"), multipartFormData);
 
     if (result.StatusCode == HttpStatusCode.Created) {
@@ -119,6 +124,7 @@ public class AuthController : ControllerBase {
       };
     }
 
+    // TODO: Написать утилиту для гарантированного получения значений из конфига
     var emailAddress =
       _configuration.GetRequiredSection("MailSettings").GetValue<string>("Address");
 
