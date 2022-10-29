@@ -23,6 +23,7 @@
         <PackageReference Include="Npgsql" Version="7.0.0-rc.2" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-rc.2" />
         <PackageReference Include="Serilog" Version="2.12.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.1-dev-10301" />
         <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00896" />
         <PackageReference Include="StyleCop" Version="6.2.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
