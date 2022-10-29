@@ -7,7 +7,7 @@ public static class ConfigurationExtensions {
   /// <summary>
   /// Validator of configuration: Checks existing of required properties
   /// </summary>
-  /// <param name="configuration">Manager of configuration</param>
+  /// <param name="configuration">Manager of configuration (see <see cref="ConfigurationManager"/>)</param>
   /// <exception cref="InvalidOperationException">Throws, if any of required sections in configuration are missing</exception>
   public static void ValidateConfiguration(this ConfigurationManager configuration) {
 

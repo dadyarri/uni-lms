@@ -1,13 +1,17 @@
 ﻿namespace src.Extensions; 
 
 /// <summary>
-/// 
+/// Extensions for <see cref="WebApplication"/>
 /// </summary>
 public static class ApplicationExtensions {
   /// <summary>
-  /// 
+  /// Configure Swagger
   /// </summary>
-  /// <param name="application"></param>
+  /// <remarks>
+  /// 1. Enable Swagger in every environment<br/>
+  /// 2. Set URL for OpenAPI JSON file
+  /// </remarks>
+  /// <param name="application"><see cref="WebApplication"/>'s object</param>
   public static void ConfigureSwagger(this WebApplication application) {
     application.UseSwagger();
     application.UseSwaggerUI(

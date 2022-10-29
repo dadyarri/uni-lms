@@ -7,13 +7,13 @@ using Serilog.Events;
 namespace src.Extensions; 
 
 /// <summary>
-/// 
+/// Extensions for <see cref="WebApplicationBuilder"/>
 /// </summary>
 public static class BuilderExtensions {
   /// <summary>
-  /// 
+  /// Enable Serilog as default logger system
   /// </summary>
-  /// <param name="builder"></param>
+  /// <param name="builder"><see cref="WebApplicationBuilder"/>'s object</param>
   public static void ConfigureSerilog(this WebApplicationBuilder builder) {
     builder.Host.UseSerilog();
     builder.Services.AddLogging(options => options.AddSerilog(dispose: true));

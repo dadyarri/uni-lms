@@ -9,10 +9,14 @@ using src.OperationFilters;
 namespace src.Extensions; 
 
 /// <summary>
-/// 
+/// Extensions for <see cref="IServiceCollection"/>
 /// </summary>
 public static class ServicesExtensions {
 
+  /// <summary>
+  /// Register controllers with correct JSON PATCH input formatter
+  /// </summary>
+  /// <param name="services"><see cref="IServiceCollection"/>'s object</param>
   public static void RegisterControllers(this IServiceCollection services) {
     services.AddControllers(
       options => {
@@ -22,9 +26,14 @@ public static class ServicesExtensions {
   }
   
   /// <summary>
-  /// 
+  /// Configuring Swagger
   /// </summary>
-  /// <param name="services"></param>
+  /// <remarks>
+  /// 1. Add basic info of API<br/>
+  /// 2. Add description of security schema
+  /// 3. Mark endpoints, which mustn't be used anonymously with security schema (see <see cref="SecurityPolicyOperationFilter"/>)
+  /// </remarks>
+  /// <param name="services"><see cref="IServiceCollection"/>'s object</param>
   public static void ConfigureSwagger(this IServiceCollection services) {
     services.AddSwaggerGen(
       options => {

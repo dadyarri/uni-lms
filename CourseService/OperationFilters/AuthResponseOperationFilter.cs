@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace src.OperationFilters;
 
 /// <summary>
-/// Filter, which applies default security policy to every endpoints without AllowAnonymousAttribute
+/// Filter, which applies default security policy to every endpoints without <see cref="AllowAnonymousAttribute"/>
 /// </summary>
 public class SecurityPolicyOperationFilter : IOperationFilter {
   private readonly Logger<SecurityPolicyOperationFilter> _logger = new (new SerilogLoggerFactory());
