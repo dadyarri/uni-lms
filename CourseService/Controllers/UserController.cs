@@ -82,6 +82,9 @@ public class UserController : ControllerBase {
 
     Paged<User> roles =
       await Paged<User>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
+    
+    _logger.LogInformation("Fetched {Count} rows", roles.TotalCount);
+    
     return Ok(roles);
   }
 
