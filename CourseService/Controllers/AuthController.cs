@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -63,19 +62,22 @@ public class AuthController : ControllerBase {
   [HttpPost("Preregister")]
   [Produces("application/json")]
   public async Task<ActionResult<User>> Preregister(PreRegistrationParameters body) {
-    var group = await _db.Groups.FindAsync(body.GroupId);
-    var role = await _db.Roles.FindAsync(body.RoleId);
+    Group? group = null;
+    if (body.GroupId != null) {
+      group = await _db.Groups.FindAsync(body.GroupId);
 
-    if (group == null) {
-      return NotFound(
-        new Error {
-          Code = (int)HttpStatusCode.NotFound,
-          Message = "Group with this id doesn't exist",
-          Data = body.GroupId,
-        }
-      );
+      if (group == null) {
+        return NotFound(
+          new Error {
+            Code = (int)HttpStatusCode.NotFound,
+            Message = "Group with this id doesn't exist",
+            Data = body.GroupId,
+          }
+        );
+      }
     }
 
+    var role = await _db.Roles.FindAsync(body.RoleId);
     if (role == null) {
       return NotFound(
         new Error {
@@ -143,29 +145,6 @@ public class AuthController : ControllerBase {
     }
 
     // TODO: Написать утилиту для гарантированного получения значений из конфига
-    var emailAddress =
-      _configuration.GetRequiredSection("MailSettings").GetValue<string>("Address");
-
-    var emailToken = _configuration.GetRequiredSection("MailSettings").GetValue<string>("Token");
-
-    var emailHost = _configuration.GetRequiredSection("MailSettings").GetValue<string>("Host");
-
-    var registerCode = await CreateRegisterCode(user);
-    var smtpClient = new SmtpClient(emailHost) {
-      Port = 465,
-      Credentials = new NetworkCredential(emailAddress, emailToken),
-      EnableSsl = true,
-    };
-    var mailMessage = new MailMessage {
-      From = new MailAddress(emailAddress),
-      Subject = "Код регистрации для образовательной платформы",
-      Body =
-        $"<h1>Здравствуйте, {body.FirstName}!</h1> <p>Ваш адрес электронной почты был указан при создании аккаунта на сайте образовательной платформы. Зарегистрируйте аккаунт, перейдя по ссылке: https://localhost:8000/Register?code={registerCode}.</p><p>Если это письмо пришло вам по ошибке, проигнорируйте его.</p>",
-      IsBodyHtml = true,
-    };
-    mailMessage.To.Add(body.Email);
-
-    smtpClient.Send(mailMessage);
     return Created("/api/Auth/PreRegistration", user);
   }
 
