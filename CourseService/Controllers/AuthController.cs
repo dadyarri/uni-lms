@@ -27,7 +27,6 @@ namespace src.Controllers;
 /// Working with users (registration/authorization/authentication...)
 /// </summary>
 [ApiController]
-// [Authorize(Roles = "Admin")]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase {
   private readonly IConfiguration _configuration;
@@ -59,6 +58,7 @@ public class AuthController : ControllerBase {
   /// 3. Save user to database
   /// 4. Send email with register code
   /// </remarks>
+  [Authorize(Roles = "Admin")]
   [HttpPost("Preregister")]
   [Produces("application/json")]
   public async Task<ActionResult<User>> Preregister(PreRegistrationParameters body) {
