@@ -11,8 +11,8 @@ namespace src.OperationFilters;
 /// <summary>
 /// Filter, which applies default security policy to every endpoints without AllowAnonymousAttribute
 /// </summary>
-public class AuthResponsesOperationFilter : IOperationFilter {
-  private readonly Logger<AuthResponsesOperationFilter> _logger = new (new SerilogLoggerFactory());
+public class SecurityPolicyOperationFilter : IOperationFilter {
+  private readonly Logger<SecurityPolicyOperationFilter> _logger = new (new SerilogLoggerFactory());
 
   /// <summary>
   /// Applies the filter

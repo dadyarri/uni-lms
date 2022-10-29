@@ -62,7 +62,7 @@ builder.Services.AddSwaggerGen(
       }
     );
 
-    options.OperationFilter<AuthResponsesOperationFilter>();
+    options.OperationFilter<SecurityPolicyOperationFilter>();
 
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(
