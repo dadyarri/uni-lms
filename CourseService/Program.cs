@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 using Serilog;
+using Serilog.Events;
 
 using src.Data;
 using src.Extensions;
@@ -11,8 +12,11 @@ using src.OperationFilters;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
-Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.Console().CreateLogger();
+Log.Logger = new LoggerConfiguration()
+             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+             .Enrich.FromLogContext().WriteTo.Console().CreateLogger();
 
 
 builder.Services.AddControllers(
@@ -24,7 +28,6 @@ builder.Services.AddControllers(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
   options => {
-    
     options.SwaggerDoc(
       "v1",
       new OpenApiInfo {
@@ -34,18 +37,21 @@ builder.Services.AddSwaggerGen(
           "API for working with courses, users, groups, auth",
       }
     );
-    
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-      Description = "The project uses authentication with JWT. Input 'Bearer' [space] and your token after in the field below.",
-      Name = "Authorization",
-      In = ParameterLocation.Header,
-      Type = SecuritySchemeType.ApiKey,
-      Scheme = "Bearer",
-    });
+
+    options.AddSecurityDefinition(
+      "Bearer",
+      new OpenApiSecurityScheme {
+        Description =
+          "The project uses authentication with JWT. Input 'Bearer' [space] and your token after in the field below.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+      }
+    );
 
     options.OperationFilter<AuthResponsesOperationFilter>();
-    
+
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(
       Path.Combine(AppContext.BaseDirectory, xmlFilename),
@@ -80,6 +86,7 @@ using (var scope = app.Services.CreateScope()) {
   }
 }
 
+app.UseSerilogRequestLogging();
 app.UseAuthorization();
 
 app.MapControllers();
