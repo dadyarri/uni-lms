@@ -16,11 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
 var loggerConfiguration = new LoggerConfiguration()
-                          .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                           .Enrich.FromLogContext().WriteTo.Console();
 
 if (builder.Environment.EnvironmentName == "Development" || Debugger.IsAttached) {
-  loggerConfiguration.MinimumLevel.Debug();
+  loggerConfiguration.MinimumLevel.Debug()
+                     .MinimumLevel.Override("Microsoft", LogEventLevel.Debug);
+} else {
+  loggerConfiguration.MinimumLevel.Information()
+                     .MinimumLevel.Override("Microsoft", LogEventLevel.Information);
 }
 
 Log.Logger = loggerConfiguration.CreateLogger();
