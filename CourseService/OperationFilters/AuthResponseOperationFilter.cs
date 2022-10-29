@@ -22,13 +22,17 @@ public class AuthResponsesOperationFilter : IOperationFilter {
   /// <param name="operation">OpenAPI's endpoint</param>
   /// <param name="context">Filter's context</param>
   public void Apply(OpenApiOperation operation, OperationFilterContext context) {
-    if (context.MethodInfo.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
-      _logger.Information("{MethodName} has AllowAnonymous, skipping", context.MethodInfo.Name);
+    if (context.MethodInfo.DeclaringType == null) {
+      _logger.Information("{DeclaringType} is null, skipping", context.MethodInfo.DeclaringType);
       return;
     }
 
-    if (context.MethodInfo.DeclaringType == null) {
-      _logger.Information("{DeclaringType} is null, skipping", context.MethodInfo.DeclaringType);
+    if (context.MethodInfo.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
+      _logger.Information(
+        "{TypeName}.{MethodName} has AllowAnonymous, skipping",
+        context.MethodInfo.DeclaringType.Name,
+        context.MethodInfo.Name
+      );
       return;
     }
 
@@ -40,8 +44,12 @@ public class AuthResponsesOperationFilter : IOperationFilter {
       );
       return;
     }
-    
-    _logger.Information("{MethodName} hasn't AllowAnonymous, adding security policy", context.MethodInfo.Name);
+
+    _logger.Information(
+      "{TypeName}.{MethodName} hasn't AllowAnonymous, adding security policy",
+      context.MethodInfo.DeclaringType.Name,
+      context.MethodInfo.Name
+    );
 
     operation.Security = new List<OpenApiSecurityRequirement>() {
       new() {
