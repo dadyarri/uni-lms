@@ -15,7 +15,7 @@ public class SecurityPolicyOperationFilter : IOperationFilter {
   private readonly Logger<SecurityPolicyOperationFilter> _logger = new (new SerilogLoggerFactory());
 
   /// <summary>
-  /// Applies the filter
+  /// Filters out every endpoint with AllowAnonymous attribute and applies JWT authentication to rest of endpoints  
   /// </summary>
   /// <param name="operation">OpenAPI's endpoint</param>
   /// <param name="context">Filter's context</param>
