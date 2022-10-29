@@ -191,7 +191,8 @@ public class AuthController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<ActionResult<string>> Login(LoginBody body) {
-    var user = await _db.Users.FirstOrDefaultAsync(u => u.Email.Equals(body.Email));
+    var user = await _db.Users.Include(u => u.Role)
+                        .FirstOrDefaultAsync(u => u.Email.Equals(body.Email));
 
     if (user is null) {
       return BadRequest(
