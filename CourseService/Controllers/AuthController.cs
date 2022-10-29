@@ -166,7 +166,7 @@ public class AuthController : ControllerBase {
     CreatePasswordHash(body.Password, out var passwordHash, out var passwordSalt);
 
     registerCode.IsValid = false;
-    registerCode.UsedAt = DateTime.Now;
+    registerCode.UsedAt = DateTime.UtcNow;
 
     if (registerCode.UsedBy == null) {
       return Problem("Register code doesn't have user, to which the code is belong");
