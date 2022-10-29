@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using src.Data;
 using src.Models;
+using src.PreparedRequestBodies;
 using src.RequestBodies;
 using src.Responses;
 
@@ -80,8 +81,8 @@ public class UserController : ControllerBase {
   ) {
     var queryResults = _db.Users.OrderBy(p => p.Id);
 
-    Paged<User> roles =
-      await Paged<User>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
+    var roles =
+      await Paged<User>.ToPaged(queryResults, new PreparedPagingParameters(parameters));
     
     _logger.LogInformation("Fetched {Count} rows", roles.TotalCount);
     
