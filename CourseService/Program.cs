@@ -3,12 +3,16 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
+using Serilog;
+
 using src.Data;
 using src.Extensions;
 using src.OperationFilters;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.Console().CreateLogger();
 
 
 builder.Services.AddControllers(
@@ -51,6 +55,7 @@ builder.Services.AddSwaggerGen(
 );
 
 builder.Services.AddSingleton<HttpClient>();
+builder.Services.AddLogging(options => options.AddSerilog(dispose: true));
 
 builder.Configuration.ValidateConfiguration();
 
