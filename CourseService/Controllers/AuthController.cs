@@ -160,7 +160,8 @@ public class AuthController : ControllerBase {
   [ProducesResponseType(StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<ActionResult<User>> Register(RegisterBody body) {
-    var registerCode = await _db.RegisterCodes.FirstAsync(rc => rc.Code.Equals(body.RegisterCode));
+    var registerCode = await _db.RegisterCodes.Include(rc => rc.UsedBy)
+                                .FirstAsync(rc => rc.Code.Equals(body.RegisterCode));
 
     CreatePasswordHash(body.Password, out var passwordHash, out var passwordSalt);
 
