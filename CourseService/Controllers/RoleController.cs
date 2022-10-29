@@ -5,6 +5,7 @@
 
   using src.Data;
   using src.Models;
+  using src.PreparedRequestBodies;
   using src.RequestBodies;
   using src.Responses;
 
@@ -81,7 +82,7 @@
       var queryResults = _db.Roles.OrderBy(p => p.Id);
 
       Paged<Role> roles =
-        await Paged<Role>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
+        await Paged<Role>.ToPaged(queryResults, new PreparedPagingParameters(parameters));
       return Ok(roles);
     }
 
