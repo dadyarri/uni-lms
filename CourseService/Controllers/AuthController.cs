@@ -59,9 +59,9 @@ public class AuthController : ControllerBase {
   /// 3. Save user to database
   /// 4. Send email with register code
   /// </remarks>
-  [HttpPost("PreRegistration")]
+  [HttpPost("Preregister")]
   [Produces("application/json")]
-  public async Task<ActionResult<User>> PreRegistration(PreRegistrationParameters body) {
+  public async Task<ActionResult<User>> Preregister(PreRegistrationParameters body) {
     var group = await _db.Groups.FindAsync(body.GroupId);
     var role = await _db.Roles.FindAsync(body.RoleId);
 
