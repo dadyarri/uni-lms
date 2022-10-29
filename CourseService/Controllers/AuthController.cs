@@ -40,7 +40,9 @@ public class AuthController : ControllerBase {
   /// <param name="context">Automatically injected database context</param>
   /// <param name="configuration">Automatically injected project configuration</param>
   /// <param name="httpClient">Automatically injected http client</param>
-  public AuthController(ApplicationContext context, IConfiguration configuration, HttpClient httpClient) {
+  public AuthController(
+    ApplicationContext context, IConfiguration configuration, HttpClient httpClient
+  ) {
     _db = context;
     _configuration = configuration;
     _httpClient = httpClient;
@@ -51,7 +53,12 @@ public class AuthController : ControllerBase {
   /// </summary>
   /// <param name="body">User's personal data</param>
   /// <returns>Model of created users</returns>
-  /// <exception cref="MissingConfigurationValueException">Raised, if configuration lacks of required properties</exception>
+  /// <remarks>
+  /// 1. Find passed group &amp; role; raise if not found<br/>
+  /// 2. Upload passed avatar to File API
+  /// 3. Save user to database
+  /// 4. Send email with register code
+  /// </remarks>
   [HttpPost("PreRegistration")]
   [Produces("application/json")]
   public async Task<ActionResult<User>> PreRegistration(PreRegistrationParameters body) {
@@ -77,24 +84,32 @@ public class AuthController : ControllerBase {
         }
       );
     }
-    
+
     // uploading avatar to file service
-    
+
     // TODO: Избавиться от таблицы AttachmentDto в этом микросервисе, хранить лишь ИД аватарки
     // TODO: Перенести загрузку вложения в утилиту (здесь ее просто вызывать и получать идентификатор)
     AttachmentDto? attachment = null;
     var multipartFormData = new MultipartFormDataContent();
     var ms = new MemoryStream();
     await body.Avatar.CopyToAsync(ms);
-    multipartFormData.Add(new ByteArrayContent(ms.ToArray()), body.Avatar.FileName, body.Avatar.FileName);
+    multipartFormData.Add(
+      new ByteArrayContent(ms.ToArray()),
+      body.Avatar.FileName,
+      body.Avatar.FileName
+    );
 
     // TODO: Придумать способ динамически получать урл микросервиса
-    var result = await _httpClient.PostAsync(new Uri("https://localhost:8080/api/File"), multipartFormData);
+    // TODO: Написать клиент сервиса "Файл"
+    var result = await _httpClient.PostAsync(
+      new Uri("https://localhost:8080/api/File"),
+      multipartFormData
+    );
 
     if (result.StatusCode == HttpStatusCode.Created) {
       var resultBody = await result.Content.ReadAsStringAsync();
       attachment = JsonConvert.DeserializeObject<AttachmentDto>(resultBody);
-    } 
+    }
 
     var user = new User {
       FirstName = body.FirstName,
