@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,15 @@ using src.OperationFilters;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
-Log.Logger = new LoggerConfiguration()
-             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-             .Enrich.FromLogContext().WriteTo.Console().CreateLogger();
+var loggerConfiguration = new LoggerConfiguration()
+                          .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                          .Enrich.FromLogContext().WriteTo.Console();
+
+if (builder.Environment.EnvironmentName == "Development" || Debugger.IsAttached) {
+  loggerConfiguration.MinimumLevel.Debug();
+}
+
+Log.Logger = loggerConfiguration.CreateLogger();
 
 
 builder.Services.AddControllers(
@@ -24,6 +31,8 @@ builder.Services.AddControllers(
     options.InputFormatters.Insert(0, ApplicationJpif.GetJsonPatchInputFormatter());
   }
 ).AddNewtonsoftJson();
+
+builder.Services.AddLogging(options => options.AddSerilog(dispose: true));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
@@ -61,7 +70,6 @@ builder.Services.AddSwaggerGen(
 );
 
 builder.Services.AddSingleton<HttpClient>();
-builder.Services.AddLogging(options => options.AddSerilog(dispose: true));
 
 builder.Configuration.ValidateConfiguration();
 
