@@ -23,12 +23,12 @@ public class AuthResponsesOperationFilter : IOperationFilter {
   /// <param name="context">Filter's context</param>
   public void Apply(OpenApiOperation operation, OperationFilterContext context) {
     if (context.MethodInfo.DeclaringType == null) {
-      _logger.Information("{DeclaringType} is null, skipping", context.MethodInfo.DeclaringType);
+      _logger.Debug("{DeclaringType} is null, skipping", context.MethodInfo.DeclaringType);
       return;
     }
 
     if (context.MethodInfo.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
-      _logger.Information(
+      _logger.Debug(
         "{TypeName}.{MethodName} has AllowAnonymous, skipping",
         context.MethodInfo.DeclaringType.Name,
         context.MethodInfo.Name
@@ -38,14 +38,14 @@ public class AuthResponsesOperationFilter : IOperationFilter {
 
     if (context.MethodInfo
                .DeclaringType.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
-      _logger.Information(
+      _logger.Debug(
         "{Name} has AllowAnonymous, skipping",
         context.MethodInfo.DeclaringType.Name
       );
       return;
     }
 
-    _logger.Information(
+    _logger.Debug(
       "{TypeName}.{MethodName} hasn't AllowAnonymous, adding security policy",
       context.MethodInfo.DeclaringType.Name,
       context.MethodInfo.Name
