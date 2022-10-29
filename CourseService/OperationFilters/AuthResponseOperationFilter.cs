@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 
-using Serilog;
+using Serilog.Extensions.Logging;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
-
-using ILogger = Serilog.ILogger;
 
 
 namespace src.OperationFilters;
@@ -14,7 +12,7 @@ namespace src.OperationFilters;
 /// Filter, which applies default security policy to every endpoints without AllowAnonymousAttribute
 /// </summary>
 public class AuthResponsesOperationFilter : IOperationFilter {
-  private readonly ILogger _logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+  private readonly Logger<AuthResponsesOperationFilter> _logger = new (new SerilogLoggerFactory());
 
   /// <summary>
   /// Applies the filter
@@ -23,12 +21,12 @@ public class AuthResponsesOperationFilter : IOperationFilter {
   /// <param name="context">Filter's context</param>
   public void Apply(OpenApiOperation operation, OperationFilterContext context) {
     if (context.MethodInfo.DeclaringType == null) {
-      _logger.Debug("{DeclaringType} is null, skipping", context.MethodInfo.DeclaringType);
+      _logger.LogDebug("{DeclaringType} is null, skipping", context.MethodInfo.DeclaringType);
       return;
     }
 
     if (context.MethodInfo.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
-      _logger.Debug(
+      _logger.LogDebug(
         "{TypeName}.{MethodName} has AllowAnonymous, skipping",
         context.MethodInfo.DeclaringType.Name,
         context.MethodInfo.Name
@@ -38,14 +36,14 @@ public class AuthResponsesOperationFilter : IOperationFilter {
 
     if (context.MethodInfo
                .DeclaringType.GetCustomAttributes(true).Any(x => x is AllowAnonymousAttribute)) {
-      _logger.Debug(
+      _logger.LogDebug(
         "{Name} has AllowAnonymous, skipping",
         context.MethodInfo.DeclaringType.Name
       );
       return;
     }
 
-    _logger.Debug(
+    _logger.LogDebug(
       "{TypeName}.{MethodName} hasn't AllowAnonymous, adding security policy",
       context.MethodInfo.DeclaringType.Name,
       context.MethodInfo.Name
