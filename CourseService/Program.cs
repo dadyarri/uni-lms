@@ -1,4 +1,8 @@
+using System.Text;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 using Serilog;
 
@@ -13,6 +17,19 @@ builder.Services.RegisterControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
 builder.Services.AddSingleton<HttpClient>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+  options => {
+    options.TokenValidationParameters = new TokenValidationParameters {
+      RequireAudience = false,
+      ValidateAudience = false,
+      ValidateIssuer = false,
+      ValidateLifetime = true,
+      ValidateIssuerSigningKey = true,
+      IssuerSigningKey =
+        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Security:Token"])),
+    };
+  }
+);
 
 builder.Configuration.ValidateConfiguration();
 
@@ -32,6 +49,8 @@ using (var scope = app.Services.CreateScope()) {
 }
 
 app.UseSerilogRequestLogging();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
