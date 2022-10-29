@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 
 using src.Data;
 using src.Extensions;
+using src.OperationFilters;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddControllers(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
   options => {
+    
     options.SwaggerDoc(
       "v1",
       new OpenApiInfo {
@@ -28,6 +30,18 @@ builder.Services.AddSwaggerGen(
           "API for working with courses, users, groups, auth",
       }
     );
+    
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+      Description = "The project uses authentication with JWT. Input 'Bearer' [space] and your token after in the field below.",
+      Name = "Authorization",
+      In = ParameterLocation.Header,
+      Type = SecuritySchemeType.ApiKey,
+      Scheme = "Bearer",
+    });
+
+    options.OperationFilter<AuthResponsesOperationFilter>();
+    
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(
       Path.Combine(AppContext.BaseDirectory, xmlFilename),
