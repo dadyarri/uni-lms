@@ -28,6 +28,7 @@ namespace src.Controllers;
 /// Working with users (registration/authorization/authentication...)
 /// </summary>
 [ApiController]
+// [Authorize(Roles = "Admin")]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase {
   private readonly IConfiguration _configuration;
@@ -85,30 +86,32 @@ public class AuthController : ControllerBase {
       );
     }
 
-    // uploading avatar to file service
-
-    // TODO: Избавиться от таблицы AttachmentDto в этом микросервисе, хранить лишь ИД аватарки
-    // TODO: Перенести загрузку вложения в утилиту (здесь ее просто вызывать и получать идентификатор)
     AttachmentDto? attachment = null;
-    var multipartFormData = new MultipartFormDataContent();
-    var ms = new MemoryStream();
-    await body.Avatar.CopyToAsync(ms);
-    multipartFormData.Add(
-      new ByteArrayContent(ms.ToArray()),
-      body.Avatar.FileName,
-      body.Avatar.FileName
-    );
+    // uploading avatar to file service
+    if (body.Avatar is not null) {
+      // TODO: Избавиться от таблицы AttachmentDto в этом микросервисе, хранить лишь ИД аватарки
+      // TODO: Перенести загрузку вложения в утилиту (здесь ее просто вызывать и получать идентификатор)
 
-    // TODO: Придумать способ динамически получать урл микросервиса
-    // TODO: Написать клиент сервиса "Файл"
-    var result = await _httpClient.PostAsync(
-      new Uri("https://localhost:8080/api/File"),
-      multipartFormData
-    );
+      var multipartFormData = new MultipartFormDataContent();
+      var ms = new MemoryStream();
+      await body.Avatar.CopyToAsync(ms);
+      multipartFormData.Add(
+        new ByteArrayContent(ms.ToArray()),
+        body.Avatar.FileName,
+        body.Avatar.FileName
+      );
 
-    if (result.StatusCode == HttpStatusCode.Created) {
-      var resultBody = await result.Content.ReadAsStringAsync();
-      attachment = JsonConvert.DeserializeObject<AttachmentDto>(resultBody);
+      // TODO: Придумать способ динамически получать урл микросервиса
+      // TODO: Написать клиент сервиса "Файл"
+      var result = await _httpClient.PostAsync(
+        new Uri("https://localhost:8080/api/File"),
+        multipartFormData
+      );
+
+      if (result.StatusCode == HttpStatusCode.Created) {
+        var resultBody = await result.Content.ReadAsStringAsync();
+        attachment = JsonConvert.DeserializeObject<AttachmentDto>(resultBody);
+      }
     }
 
     var user = new User {
