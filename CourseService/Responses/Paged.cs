@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using src.PreparedRequestBodies;
+
 
 namespace src.Responses;
 
@@ -68,11 +70,10 @@ public class Paged<TModel> {
   /// Converting query results to paginated result
   /// </summary>
   /// <param name="source">Query results</param>
-  /// <param name="pageNumber">Number of page to fetch</param>
-  /// <param name="pageSize">Size of page</param>
+  /// <param name="parameters"></param>
   /// <returns>Paginated result</returns>
   public static async Task<Paged<TModel>> ToPaged(
-    IQueryable<TModel> source, int pageNumber, int pageSize
+    IQueryable<TModel> source, PreparedPagingParameters parameters
   ) {
     var count = source.Count();
     List<TModel> items;
@@ -80,14 +81,15 @@ public class Paged<TModel> {
     if (count == 0) {
       items = new List<TModel>();
     } else {
-      items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+      items = await source.Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                          .Take(parameters.PageSize).ToListAsync();
     }
 
     return new Paged<TModel>(
       items,
       count,
-      pageNumber,
-      pageSize
+      parameters.PageNumber,
+      parameters.PageSize
     );
   }
 }
