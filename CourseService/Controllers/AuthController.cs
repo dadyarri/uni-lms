@@ -52,9 +52,9 @@ public class AuthController : ControllerBase {
   /// <param name="body">User's personal data</param>
   /// <returns>Model of created users</returns>
   /// <exception cref="MissingConfigurationValueException">Raised, if configuration lacks of required properties</exception>
-  [HttpPost("Create")]
+  [HttpPost("PreRegistration")]
   [Produces("application/json")]
-  public async Task<ActionResult<User>> Create(UserParameters body) {
+  public async Task<ActionResult<User>> PreRegistration(PreRegistrationParameters body) {
     var group = await _db.Groups.FindAsync(body.GroupId);
     var role = await _db.Roles.FindAsync(body.RoleId);
 
@@ -142,7 +142,7 @@ public class AuthController : ControllerBase {
     mailMessage.To.Add(body.Email);
 
     smtpClient.Send(mailMessage);
-    return Created("/api/Auth/Create", user);
+    return Created("/api/Auth/PreRegistration", user);
   }
 
   /// <summary>

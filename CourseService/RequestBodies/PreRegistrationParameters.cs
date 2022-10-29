@@ -6,7 +6,7 @@ namespace src.RequestBodies;
 /// <summary>
 /// Request body to Register endpoint
 /// </summary>
-public class UserParameters {
+public class PreRegistrationParameters {
   /// <summary>
   /// First name of user
   /// </summary>
