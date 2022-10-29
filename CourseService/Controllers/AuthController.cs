@@ -62,7 +62,7 @@ public class AuthController : ControllerBase {
       return NotFound(
         new Error {
           Code = (int)HttpStatusCode.NotFound,
-          Message = "GroupId with this id doesn't exist",
+          Message = "Group with this id doesn't exist",
           Data = body.GroupId,
         }
       );
@@ -72,7 +72,7 @@ public class AuthController : ControllerBase {
       return NotFound(
         new Error {
           Code = (int)HttpStatusCode.NotFound,
-          Message = "RoleId with this id doesn't exist",
+          Message = "Role with this id doesn't exist",
           Data = body.RoleId,
         }
       );
