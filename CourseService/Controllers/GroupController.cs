@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using src.Data;
 using src.Models;
+using src.PreparedRequestBodies;
 using src.RequestBodies;
 using src.Responses;
 
@@ -81,7 +82,7 @@ public class GroupController : ControllerBase {
     var queryResults = _db.Groups.OrderBy(p => p.Name);
 
     Paged<Group> groups =
-      await Paged<Group>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
+      await Paged<Group>.ToPaged(queryResults, new PreparedPagingParameters(parameters));
     return Ok(groups);
   }
 
