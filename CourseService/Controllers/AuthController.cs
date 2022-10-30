@@ -4,6 +4,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
+using Mapster;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -61,7 +63,7 @@ public class AuthController : ControllerBase {
   [Authorize(Roles = "Admin")]
   [HttpPost("Preregister")]
   [Produces("application/json")]
-  public async Task<ActionResult<User>> Preregister(PreRegistrationParameters body) {
+  public async Task<ActionResult<PreregisterResponse>> Preregister(PreRegistrationParameters body) {
     Group? group = null;
     if (body.GroupId != null) {
       group = await _db.Groups.FindAsync(body.GroupId);
@@ -128,7 +130,19 @@ public class AuthController : ControllerBase {
     }
 
     var registerCode = await CreateRegisterCode(user);
-    return Created("/api/Auth/PreRegistration", user);
+    var mapConfig = TypeAdapterConfig<User, PreregisterResponse>
+                    .NewConfig()
+                    .IgnoreNullValues(true)
+                    .Map(
+                      dest => dest.RoleName,
+                      src => src.Role.Name
+                    ).Map(
+                      dest => dest.RegisterCode,
+                      _ => registerCode
+                    )
+                    .Config;
+    var result = user.Adapt<PreregisterResponse>(mapConfig);
+    return Created("/api/Auth/PreRegistration", result);
   }
 
   /// <summary>
