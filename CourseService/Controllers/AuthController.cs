@@ -249,7 +249,7 @@ public class AuthController : ControllerBase {
 
     claims.Add(new Claim(ClaimTypes.Role, role.Name));
 
-    var securityToken = _configuration.GuaranteedGetValue("Section:Token");
+    var securityToken = _configuration.GuaranteedGetValue("Security:Token");
 
     var key = new SymmetricSecurityKey(
       Encoding.UTF8.GetBytes(securityToken)
