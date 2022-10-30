@@ -3,7 +3,7 @@
 /// <summary>
 /// Request body to Register endpoint
 /// </summary>
-public class PreRegistrationParameters {
+public class PreregisterParameters {
   /// <summary>
   /// First name of user
   /// </summary>

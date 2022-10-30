@@ -63,7 +63,7 @@ public class AuthController : ControllerBase {
   [Authorize(Roles = "Admin")]
   [HttpPost("Preregister")]
   [Produces("application/json")]
-  public async Task<ActionResult<PreregisterResponse>> Preregister(PreRegistrationParameters body) {
+  public async Task<ActionResult<PreregisterResponse>> Preregister(PreregisterParameters body) {
     Group? group = null;
     if (body.GroupId != null) {
       group = await _db.Groups.FindAsync(body.GroupId);
