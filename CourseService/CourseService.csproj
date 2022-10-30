@@ -23,14 +23,14 @@
         <PackageReference Include="Microsoft.OpenApi" Version="1.4.3"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
         <PackageReference Include="Npgsql" Version="7.0.0-rc.2"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-rc.2" />
-        <PackageReference Include="Serilog" Version="2.12.0" />
-        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0-dev-00285" />
-        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.1-dev-10301" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00896" />
-        <PackageReference Include="StyleCop" Version="6.2.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-rc.2"/>
+        <PackageReference Include="Serilog" Version="2.12.0"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0-dev-00285"/>
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.1-dev-10301"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00896"/>
+        <PackageReference Include="StyleCop" Version="6.2.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0"/>
     </ItemGroup>
 
 </Project>
