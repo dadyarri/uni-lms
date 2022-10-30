@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 
-using src.Dtos;
-
 
 namespace src.Models;
 
@@ -41,8 +39,9 @@ public class User : BaseModel {
 
   /// <summary>
   /// Profile picture of user
+  /// (ID in the File microservice)
   /// </summary>
-  public AttachmentDto? Avatar { get; set; }
+  public Guid? Avatar { get; set; }
 
   /// <summary>
   /// Email of user
