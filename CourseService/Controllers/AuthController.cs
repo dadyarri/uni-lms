@@ -13,6 +13,7 @@ using Npgsql;
 
 using src.Data;
 using src.Exceptions;
+using src.Extensions;
 using src.Models;
 using src.RequestBodies;
 using src.Responses;
@@ -248,22 +249,7 @@ public class AuthController : ControllerBase {
 
     claims.Add(new Claim(ClaimTypes.Role, role.Name));
 
-    string? securityToken;
-
-    try {
-      securityToken = _configuration.GetRequiredSection("Security:Token").Value;
-    }
-    catch (InvalidOperationException) {
-      throw new MissingConfigurationValueException(
-        "Security.Token configuration value is required"
-      );
-    }
-
-    if (securityToken == null) {
-      throw new MissingConfigurationValueException(
-        "Security.Token configuration value is required"
-      );
-    }
+    var securityToken = _configuration.GuaranteedGetValue("Section:Token");
 
     var key = new SymmetricSecurityKey(
       Encoding.UTF8.GetBytes(securityToken)
