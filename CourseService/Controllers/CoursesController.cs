@@ -16,7 +16,7 @@ public class CoursesController : ControllerBase {
   /// </summary>
   /// <param name="courseId">ID of course to find</param>
   /// <returns>Model of course</returns>
-  [HttpGet]
+  [HttpGet("{courseId:guid}")]
   [Produces("application/json")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   public async Task<ActionResult<Course>> GetById(Guid courseId) {
