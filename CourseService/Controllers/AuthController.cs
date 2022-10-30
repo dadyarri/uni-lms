@@ -9,16 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-using Newtonsoft.Json;
-
 using Npgsql;
 
 using src.Data;
-using src.Dtos;
 using src.Exceptions;
 using src.Models;
 using src.RequestBodies;
 using src.Responses;
+using src.ServicesClients;
+using src.Utils;
 
 
 namespace src.Controllers;
@@ -88,32 +87,14 @@ public class AuthController : ControllerBase {
       );
     }
 
-    AttachmentDto? attachment = null;
     // uploading avatar to file service
+    Guid? attachment = null;
     if (body.Avatar is not null) {
-      // TODO: Избавиться от таблицы AttachmentDto в этом микросервисе, хранить лишь ИД аватарки
-      // TODO: Перенести загрузку вложения в утилиту (здесь ее просто вызывать и получать идентификатор)
-
-      var multipartFormData = new MultipartFormDataContent();
-      var ms = new MemoryStream();
-      await body.Avatar.CopyToAsync(ms);
-      multipartFormData.Add(
-        new ByteArrayContent(ms.ToArray()),
-        body.Avatar.FileName,
-        body.Avatar.FileName
-      );
-
-      // TODO: Придумать способ динамически получать урл микросервиса
-      // TODO: Написать клиент сервиса "Файл"
-      var result = await _httpClient.PostAsync(
-        new Uri("https://localhost:8080/api/File"),
-        multipartFormData
-      );
-
-      if (result.StatusCode == HttpStatusCode.Created) {
-        var resultBody = await result.Content.ReadAsStringAsync();
-        attachment = JsonConvert.DeserializeObject<AttachmentDto>(resultBody);
-      }
+      var multipartFormData = await FileUploading.BuildFormDataContent(body.Avatar);
+      attachment =
+        await new FileClient(_httpClient, Request.Headers.Authorization[0]).UploadFile(
+          multipartFormData
+        );
     }
 
     var user = new User {
@@ -126,6 +107,7 @@ public class AuthController : ControllerBase {
       Email = body.Email,
       Avatar = attachment,
     };
+
     await _db.Users.AddAsync(user);
     try {
       await _db.SaveChangesAsync();
