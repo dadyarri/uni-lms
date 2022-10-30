@@ -127,8 +127,6 @@ public class AuthController : ControllerBase {
     }
 
     var registerCode = await CreateRegisterCode(user);
-
-    // TODO: Написать утилиту для гарантированного получения значений из конфига
     return Created("/api/Auth/PreRegistration", user);
   }
 
