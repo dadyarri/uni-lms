@@ -31,20 +31,17 @@ namespace src.Controllers;
 public class AuthController : ControllerBase {
   private readonly IConfiguration _configuration;
   private readonly ApplicationContext _db;
-  private readonly HttpClient _httpClient;
 
   /// <summary>
   /// Controller's constructor
   /// </summary>
   /// <param name="context">Automatically injected database context</param>
   /// <param name="configuration">Automatically injected project configuration</param>
-  /// <param name="httpClient">Automatically injected http client</param>
   public AuthController(
-    ApplicationContext context, IConfiguration configuration, HttpClient httpClient
+    ApplicationContext context, IConfiguration configuration
   ) {
     _db = context;
     _configuration = configuration;
-    _httpClient = httpClient;
   }
 
   /// <summary>
