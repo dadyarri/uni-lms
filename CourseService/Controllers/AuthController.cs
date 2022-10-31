@@ -88,16 +88,14 @@ public class AuthController : ControllerBase {
       );
     }
 
-    var user = new User {
-      FirstName = body.FirstName,
-      LastName = body.LastName,
-      Patronymic = body.Patronymic,
-      Group = group,
-      Subgroup = body.Subgroup,
-      Role = role,
-      Email = body.Email,
-      Avatar = body.Avatar,
-    };
+    var body2UserMapConfig = TypeAdapterConfig<PreregisterParameters, User>
+                             .NewConfig()
+                             .IgnoreNullValues(true)
+                             .Map(dest => dest.Group, _ => group)
+                             .Map(dest => dest.Role, _ => role)
+                             .Config;
+
+    var user = body.Adapt<User>(body2UserMapConfig);
 
     await _db.Users.AddAsync(user);
     try {
