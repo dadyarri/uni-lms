@@ -41,6 +41,7 @@ public class PreregisterParameters {
 
   /// <summary>
   /// Avatar of user
+  /// (ID in File API)
   /// </summary>
-  public required IFormFile? Avatar { get; set; }
+  public required Guid? Avatar { get; set; }
 }

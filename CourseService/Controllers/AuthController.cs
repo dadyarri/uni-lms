@@ -19,8 +19,6 @@ using src.Extensions;
 using src.Models;
 using src.RequestBodies;
 using src.Responses;
-using src.ServicesClients;
-using src.Utils;
 
 
 namespace src.Controllers;
@@ -90,16 +88,6 @@ public class AuthController : ControllerBase {
       );
     }
 
-    // uploading avatar to file service
-    Guid? attachment = null;
-    if (body.Avatar is not null) {
-      var multipartFormData = await FileUploading.BuildFormDataContent(body.Avatar);
-      attachment =
-        await new FileClient(_httpClient, Request.Headers.Authorization[0]).UploadFile(
-          multipartFormData
-        );
-    }
-
     var user = new User {
       FirstName = body.FirstName,
       LastName = body.LastName,
@@ -108,7 +96,7 @@ public class AuthController : ControllerBase {
       Subgroup = body.Subgroup,
       Role = role,
       Email = body.Email,
-      Avatar = attachment,
+      Avatar = body.Avatar,
     };
 
     await _db.Users.AddAsync(user);
